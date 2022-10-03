@@ -1,0 +1,3 @@
+User-agent: *
+Sitemap: https://shopping-list-f19c0.web.app/
+Disallow:

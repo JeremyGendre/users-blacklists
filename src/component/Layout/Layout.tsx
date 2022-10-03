@@ -93,7 +93,7 @@ export default function Layout({ children, window }: PropsWithChildren<{window?:
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        <Link to="/" className="no-decoration-link">Shopping list</Link>
+                        <Link to="/" className="no-decoration-link">User blacklists</Link>
                     </Typography>
                 </Toolbar>
             </AppBar>

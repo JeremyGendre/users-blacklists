@@ -19,7 +19,7 @@ export default function LoginPage() {
         setError(null);
         login(email, password)
             .catch((error:any) => {
-                console.log(error);
+                console.error(error);
                 setError(getReadableAuthError(error));
             }).finally(() => setLoading(false));
     };

@@ -20,7 +20,7 @@ export default function RegisterPage() {
         setError(null);
         register(email, password)
             .catch((error:any) => {
-                console.log(error);
+                console.error(error);
                 setError(getReadableAuthError(error));
             }).finally(() => setLoading(false));
     };

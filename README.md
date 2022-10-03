@@ -1,12 +1,5 @@
-# Template react app using firebase
+# User blacklists
 
 Welcome to this app using React, Firebase, React router, Mui.
 
-Don't forget to change config files as :
-
-- `.env` (duplicate in `.env.local` and set keys)
-- `src/config/firebase.ts`
-- `package.json`
-- `.firebaserc`
-- `public/index.html`
-- `public/manifest.json`
+The purpose of this app is to allow the user to create a bunch of user blacklists. Theses users can come from different sources : games, apps, etc.

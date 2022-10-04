@@ -16,8 +16,6 @@ import {useUser} from "../../context/UserContext";
 import {useSnackbar} from "../../context/SnackbackContext";
 import {SourceType} from "../../models/Source";
 
-const delay = (ms:any) => new Promise(res => setTimeout(res, ms));
-
 interface NewSourceFormDialogProps extends DialogProps{
     onNew?: (source: any) => void
     onEdit?: (source: any) => void
@@ -52,7 +50,6 @@ export default function SourceFormDialog({onNew, onEdit, source, ...other} : New
         }
         if(!user) return;
         setAdding(true);
-        await delay(3000);
         try{
             if(!source) addSource();
             else editSource();

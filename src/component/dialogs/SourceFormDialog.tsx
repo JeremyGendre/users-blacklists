@@ -9,25 +9,38 @@ import {
     TextField
 } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import {doc, collection, addDoc, getDoc, Timestamp} from "firebase/firestore";
-import {buildObjectFromSnapshot, db} from "../../config/firebase";
+import {buildObjectFromSnapshot, db, updateItem} from "../../config/firebase";
 import {useUser} from "../../context/UserContext";
 import {useSnackbar} from "../../context/SnackbackContext";
+import {SourceType} from "../../models/Source";
+
+const delay = (ms:any) => new Promise(res => setTimeout(res, ms));
 
 interface NewSourceFormDialogProps extends DialogProps{
-    onNewSource?: (source: any) => void
+    onNew?: (source: any) => void
+    onEdit?: (source: any) => void
+    onClose: () => void
+    source?: SourceType
 }
 
-export default function NewSourceFormDialog({onNewSource ,...other} : NewSourceFormDialogProps){
+export default function SourceFormDialog({onNew, onEdit, source, ...other} : NewSourceFormDialogProps){
     const {user} = useUser();
     const {addAlert} = useSnackbar();
-    const [name, setName] = useState<string>('');
+    const [name, setName] = useState<string>(source ? source.name : '');
     const [formError, setFormError] = useState<string|null>(null);
     const [adding, setAdding] = useState<boolean>(false);
 
+    useEffect(() => {
+        if(source) {
+            setName(source.name);
+            setFormError(null);
+        }else setName('');
+    },[source]);
+
     const handleClose = () => {
-        if(other.onClose !== undefined) other.onClose({}, "escapeKeyDown");
+        if(other.onClose !== undefined) other.onClose();
     };
 
     const handleSubmit = async (e: FormEvent) => {
@@ -39,11 +52,10 @@ export default function NewSourceFormDialog({onNewSource ,...other} : NewSourceF
         }
         if(!user) return;
         setAdding(true);
+        await delay(3000);
         try{
-            const newSourceRef = await addDoc(collection(db, "Source"), {name, user: user.uid, createdAt: Timestamp.now()});
-            const snapshot = await getDoc(doc(db, "Source", newSourceRef.id));
-            const newSource = buildObjectFromSnapshot(snapshot);
-            if(onNewSource) onNewSource(newSource);
+            if(!source) addSource();
+            else editSource();
         }catch(error: any){
             const errorMsg = error.message ?? 'An unexpected error occured';
             addAlert(errorMsg, 'error');
@@ -52,8 +64,22 @@ export default function NewSourceFormDialog({onNewSource ,...other} : NewSourceF
         }
         setAdding(false);
         handleClose();
-        addAlert(`New source '${name}' created`);
         setName('');
+    };
+
+    const addSource = async () => {
+        if(!user) return;
+        const newSourceRef = await addDoc(collection(db, "Source"), {name, user: user.uid, createdAt: Timestamp.now()});
+        const snapshot = await getDoc(doc(db, "Source", newSourceRef.id));
+        const newSource = buildObjectFromSnapshot(snapshot);
+        if(onNew) onNew(newSource);
+        addAlert(`New source '${name}' created`);
+    };
+
+    const editSource = async () => {
+        if(!source) return;
+        await updateItem('Source',source.uid, {name});
+        if(onEdit) onEdit({...source, name});
     };
 
     return (

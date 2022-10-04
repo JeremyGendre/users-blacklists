@@ -2,25 +2,27 @@ import {IconButton, Card, CardActions, CardContent, Typography, CircularProgress
 import {PropsWithChildren, useState} from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
 import ConfirmDialog from "../dialogs/ConfirmDialog";
 import {deleteItem} from "../../config/firebase";
+import {SourceType} from "../../models/Source";
 
 interface SourceCardProps{
-    uid: string;
-    title: string;
+    source: SourceType;
     onDelete: (uid: string) => void;
+    onEdit?: () => void;
 }
 
-export default function SourceCard({uid, title, onDelete, children}: PropsWithChildren<SourceCardProps>){
+export default function SourceCard({source, onDelete, onEdit, children}: PropsWithChildren<SourceCardProps>){
     const [openConfirm, setOpenConfirm] = useState(false);
     const [shadow, setShadow] = useState(1);
     const [deleting, setDeleting] = useState(false);
 
     const handleSourceDeletion = async () => {
         setDeleting(true);
-        await deleteItem('Source', uid);
+        await deleteItem('Source', source.uid);
         setDeleting(false);
-        onDelete(uid);
+        onDelete(source.uid);
     };
 
     const onMouseOver = () => setShadow(3);
@@ -31,11 +33,16 @@ export default function SourceCard({uid, title, onDelete, children}: PropsWithCh
         <Card sx={{ maxWidth: 345 }} elevation={shadow} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                    {title}
+                    {source.name}
                 </Typography>
                 {children}
             </CardContent>
             <CardActions className="justify-end">
+                {!!onEdit && (
+                    <IconButton color="primary" aria-label="edit" disabled={deleting} onClick={onEdit}>
+                        <EditIcon />
+                    </IconButton>
+                )}
                 <IconButton color="primary" aria-label="see" disabled={deleting}>
                     <VisibilityIcon />
                 </IconButton>

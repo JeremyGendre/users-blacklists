@@ -1,16 +1,18 @@
 import {Button} from "@mui/material";
 import {useEffect, useState} from "react";
-import NewSourceFormDialog from "../component/dialogs/NewSourceFormDialog";
+import SourceFormDialog from "../component/dialogs/SourceFormDialog";
 import AddIcon from '@mui/icons-material/Add';
 import {useUser} from "../context/UserContext";
 import {collection, where, getDocs, query, orderBy} from "firebase/firestore";
 import {buildCollectionFromSnapshot, db} from "../config/firebase";
 import SourceCard from "../component/cards/SourceCard";
+import {SourceType} from "../models/Source";
 
 export default function HomePage() {
     const {user} = useUser();
     const [openDialog, setOpenDialog] = useState(false);
     const [sources, setSources] = useState<any[]>([]);
+    const [editedSource, setEditedSource] = useState<SourceType|undefined>(undefined);
 
     const fetchSources = async () => {
         if(!user) return;
@@ -23,14 +25,19 @@ export default function HomePage() {
     };
 
     useEffect(() => {
-        if(user){fetchSources();}
+        if(user) fetchSources();
     }, [user]);
 
     return (
         <div className="d-flex h-full">
             <div className="m-auto d-flex flex-wrap gap-1">
                 {sources.map(source => (
-                    <SourceCard key={source.uid} title={source.name} uid={source.uid} onDelete={handleSourceDeletion}>
+                    <SourceCard
+                        key={source.uid}
+                        source={source}
+                        onDelete={handleSourceDeletion}
+                        onEdit={() => setEditedSource(source)}
+                    >
                         <div className="italic">X users blacklisted</div>
                     </SourceCard>
                 ))}
@@ -38,12 +45,17 @@ export default function HomePage() {
                     <Button variant="contained" onClick={() => setOpenDialog(true)} startIcon={<AddIcon />}>
                         New source
                     </Button>
-                    <NewSourceFormDialog
-                        open={openDialog}
-                        onClose={() => setOpenDialog(false)}
-                        onNewSource={(source) => setSources(prev => [...prev, source])}
-                    />
                 </div>
+                <SourceFormDialog
+                    open={openDialog || !!editedSource}
+                    source={editedSource}
+                    onClose={() => {setOpenDialog(false); setEditedSource(undefined)}}
+                    onEdit={(source) => setSources(prev => prev.map(s => {
+                        if(s.uid === source.uid) return source;
+                        return s;
+                    }))}
+                    onNew={(source) => setSources(prev => [...prev, source])}
+                />
             </div>
         </div>
     );

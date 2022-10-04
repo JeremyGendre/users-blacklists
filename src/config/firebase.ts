@@ -9,7 +9,7 @@ import {
 import {
     getFirestore,
     doc,
-    setDoc,
+    setDoc, QuerySnapshot, DocumentData,
 } from "firebase/firestore";
 
 // TODO: change this
@@ -48,6 +48,14 @@ const signout = async () => {
     await signOut(auth);
 };
 
+const buildCollectionFromSnapshot = (snapshot: QuerySnapshot<DocumentData>) => {
+    const newItems:any[] = [];
+    snapshot.forEach((doc) => {
+        newItems.push({uid: doc.id, ...doc.data()});
+    });
+    return newItems;
+};
+
 export {
     auth,
     db,
@@ -55,6 +63,7 @@ export {
     registerWithEmailAndPassword,
     sendPasswordReset,
     signout,
+    buildCollectionFromSnapshot
 };
 
 export default firebaseConfig;

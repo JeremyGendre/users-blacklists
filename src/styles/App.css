@@ -20,6 +20,10 @@
 .flex-col{flex-direction: column;}
 .flex-row{flex-direction: row;}
 
+.gap-half{gap:0.5em;}
+.gap-1{gap:1em;}
+.gap-2{gap:2em;}
+
 .w-full {width: 100%;}
 .h-full {height: 100%;}
 

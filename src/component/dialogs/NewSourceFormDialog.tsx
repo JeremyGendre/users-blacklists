@@ -35,12 +35,18 @@ export default function NewSourceFormDialog({...other} : DialogProps){
         }
         if(!user) return;
         setAdding(true);
-        await addDoc(collection(db, "Source"), {name, user: user.uid});
+        try{
+            await addDoc(collection(db, "Source"), {name, user: user.uid});
+        }catch(error: any){
+            const errorMsg = error.message ?? 'An unexpected error occured';
+            addAlert(errorMsg, 'error');
+            setAdding(false);
+            return;
+        }
         setAdding(false);
         handleClose();
         addAlert(`New source '${name}' created`);
         setName('');
-        return;
     };
 
     return (

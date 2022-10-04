@@ -6,14 +6,15 @@ import Layout from "./component/Layout/Layout";
 import AuthPage from "./page/auth/AuthPage";
 import LoginPage from "./page/auth/LoginPage";
 import RegisterPage from "./page/auth/RegisterPage";
+import HomePage from "./page/HomePage";
+import UserListPage from "./page/UserListPage";
 
 function App() {
     return (
         <Routes>
             <Route path="/" element={<Layout/>}>
-                <Route index element={<>home</>} />
-                <Route path="my-list" element={<>ma liste</>} />
-                <Route path="history" element={<>historique</>} />
+                <Route index element={<HomePage/>} />
+                <Route path="list/:id" element={<UserListPage/>} />
             </Route>
             <Route path="/auth" element={<AuthPage/>}>
                 <Route path="login" element={<LoginPage/>} />

@@ -45,18 +45,6 @@ export default function Layout({ children, window }: PropsWithChildren<{window?:
                     </ListItemIcon>
                     <ListItemText primary="Accueil" />
                 </ListItem>
-                <ListItem button key="categories" onClick={() => {navigate('/my-list')}}>
-                    <ListItemIcon>
-                        <ListAltIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Ma liste" />
-                </ListItem>
-                <ListItem button key="events" onClick={() => {navigate('/history')}}>
-                    <ListItemIcon>
-                        <HistoryIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Historique" />
-                </ListItem>
             </List>
             <Divider />
             <List>

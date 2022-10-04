@@ -41,7 +41,7 @@ export default function Layout({ children, window }: PropsWithChildren<{window?:
                     <ListItemIcon>
                         <HomeIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Accueil" />
+                    <ListItemText primary="Home" />
                 </ListItem>
             </List>
             <Divider />
@@ -50,7 +50,7 @@ export default function Layout({ children, window }: PropsWithChildren<{window?:
                     <ListItemIcon>
                         <LogoutIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Déconnexion" />
+                    <ListItemText primary="Logout" />
                 </ListItem>
             </List>
         </div>

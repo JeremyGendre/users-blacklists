@@ -6,15 +6,18 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import UserContextProvider from "./context/UserContext";
 import {BrowserRouter} from "react-router-dom";
+import SnackbarContextProvider from "./context/SnackbackContext";
 
 const root = createRoot(document.getElementById('root')!);
 
 root.render(
   <React.StrictMode>
       <UserContextProvider>
-          <BrowserRouter>
-              <App />
-          </BrowserRouter>
+          <SnackbarContextProvider>
+              <BrowserRouter>
+                  <App />
+              </BrowserRouter>
+          </SnackbarContextProvider>
       </UserContextProvider>
   </React.StrictMode>
 );

@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import {useUser} from "../context/UserContext";
 import {collection, where, getDocs, query, orderBy} from "firebase/firestore";
 import {buildCollectionFromSnapshot, db} from "../config/firebase";
+import SourceCard from "../component/cards/SourceCard";
 
 export default function HomePage() {
     const {user} = useUser();
@@ -25,16 +26,18 @@ export default function HomePage() {
         <div className="d-flex h-full">
             <div className="m-auto d-flex flex-wrap gap-1">
                 {sources.map(source => (
-                    <div key={source.uid}>{source.name}</div>
+                    <SourceCard key={source.uid} title={source.name}/>
                 ))}
-                <Button variant="contained" onClick={() => setOpenDialog(true)} startIcon={<AddIcon />}>
-                    New source
-                </Button>
-                <NewSourceFormDialog
-                    open={openDialog}
-                    onClose={() => setOpenDialog(false)}
-                    onNewSource={(source) => setSources(prev => [...prev, source])}
-                />
+                <div className="my-auto">
+                    <Button variant="contained" onClick={() => setOpenDialog(true)} startIcon={<AddIcon />}>
+                        New source
+                    </Button>
+                    <NewSourceFormDialog
+                        open={openDialog}
+                        onClose={() => setOpenDialog(false)}
+                        onNewSource={(source) => setSources(prev => [...prev, source])}
+                    />
+                </div>
             </div>
         </div>
     );

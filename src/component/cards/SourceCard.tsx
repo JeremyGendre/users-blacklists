@@ -6,6 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ConfirmDialog from "../dialogs/ConfirmDialog";
 import {deleteItem} from "../../config/firebase";
 import {SourceType} from "../../models/Source";
+import { useNavigate } from "react-router-dom";
 
 interface SourceCardProps{
     source: SourceType;
@@ -17,6 +18,7 @@ export default function SourceCard({source, onDelete, onEdit, children}: PropsWi
     const [openConfirm, setOpenConfirm] = useState(false);
     const [shadow, setShadow] = useState(1);
     const [deleting, setDeleting] = useState(false);
+    const navigate = useNavigate();
 
     const handleSourceDeletion = async () => {
         setDeleting(true);
@@ -43,7 +45,7 @@ export default function SourceCard({source, onDelete, onEdit, children}: PropsWi
                         <EditIcon />
                     </IconButton>
                 )}
-                <IconButton color="primary" aria-label="see" disabled={deleting}>
+                <IconButton color="primary" aria-label="see" disabled={deleting} onClick={() => navigate(`/list/${source.uid}`)}>
                     <VisibilityIcon />
                 </IconButton>
                 <IconButton color="secondary" aria-label="delete" disabled={deleting} onClick={() => setOpenConfirm(true)}>

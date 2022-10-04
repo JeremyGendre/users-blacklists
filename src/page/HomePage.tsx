@@ -18,6 +18,10 @@ export default function HomePage() {
         setSources(buildCollectionFromSnapshot(querySnapshot));
     };
 
+    const handleSourceDeletion = (sourceUid: string) => {
+        setSources(prev => prev.filter(source => source.uid !== sourceUid));
+    };
+
     useEffect(() => {
         if(user){fetchSources();}
     }, [user]);
@@ -26,7 +30,9 @@ export default function HomePage() {
         <div className="d-flex h-full">
             <div className="m-auto d-flex flex-wrap gap-1">
                 {sources.map(source => (
-                    <SourceCard key={source.uid} title={source.name}/>
+                    <SourceCard key={source.uid} title={source.name} uid={source.uid} onDelete={handleSourceDeletion}>
+                        <div className="italic">X users blacklisted</div>
+                    </SourceCard>
                 ))}
                 <div className="my-auto">
                     <Button variant="contained" onClick={() => setOpenDialog(true)} startIcon={<AddIcon />}>

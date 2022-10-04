@@ -9,7 +9,7 @@ import {
 import {
     getFirestore,
     doc,
-    setDoc, QuerySnapshot, DocumentData, DocumentSnapshot, Timestamp
+    setDoc, deleteDoc, QuerySnapshot, DocumentData, DocumentSnapshot, Timestamp
 } from "firebase/firestore";
 
 // TODO: change this
@@ -62,6 +62,10 @@ const buildObjectFromSnapshot = (snapshot: DocumentSnapshot<DocumentData>) => {
     return {uid: snapshot.id, ...snapshot.data()};
 };
 
+const deleteItem = async (collectionName: string, docId: string) => {
+    await deleteDoc(doc(db, collectionName, docId));
+};
+
 export {
     auth,
     db,
@@ -70,7 +74,8 @@ export {
     sendPasswordReset,
     signout,
     buildCollectionFromSnapshot,
-    buildObjectFromSnapshot
+    buildObjectFromSnapshot,
+    deleteItem
 };
 
 export default firebaseConfig;

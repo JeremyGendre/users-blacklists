@@ -36,7 +36,7 @@ export default function ConfirmDialog({open, title, children, onConfirm, onDismi
                     {children}
                 </DialogContentText>
             </DialogContent>
-            <DialogActions>
+            <DialogActions style={{justifyContent: 'center'}}>
                 <Button variant="contained" onClick={handleConfirm}>Yes</Button>
                 <Button variant="outlined" onClick={handleDismiss} autoFocus>No</Button>
             </DialogActions>

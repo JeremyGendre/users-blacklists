@@ -65,6 +65,7 @@
 .relative{position: relative;}
 
 .font-bold{ font-weight: bold;}
+.italic{font-style: italic;}
 
 .error{
     color: #c11515;

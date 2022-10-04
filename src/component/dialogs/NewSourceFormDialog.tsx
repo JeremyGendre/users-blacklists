@@ -10,12 +10,16 @@ import {
 } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import {FormEvent, useState} from "react";
-import { collection, addDoc } from "firebase/firestore";
-import {db} from "../../config/firebase";
+import {doc, collection, addDoc, getDoc, Timestamp} from "firebase/firestore";
+import {buildObjectFromSnapshot, db} from "../../config/firebase";
 import {useUser} from "../../context/UserContext";
 import {useSnackbar} from "../../context/SnackbackContext";
 
-export default function NewSourceFormDialog({...other} : DialogProps){
+interface NewSourceFormDialogProps extends DialogProps{
+    onNewSource?: (source: any) => void
+}
+
+export default function NewSourceFormDialog({onNewSource ,...other} : NewSourceFormDialogProps){
     const {user} = useUser();
     const {addAlert} = useSnackbar();
     const [name, setName] = useState<string>('');
@@ -36,7 +40,10 @@ export default function NewSourceFormDialog({...other} : DialogProps){
         if(!user) return;
         setAdding(true);
         try{
-            await addDoc(collection(db, "Source"), {name, user: user.uid});
+            const newSourceRef = await addDoc(collection(db, "Source"), {name, user: user.uid, createdAt: Timestamp.now()});
+            const snapshot = await getDoc(doc(db, "Source", newSourceRef.id));
+            const newSource = buildObjectFromSnapshot(snapshot);
+            if(onNewSource) onNewSource(newSource);
         }catch(error: any){
             const errorMsg = error.message ?? 'An unexpected error occured';
             addAlert(errorMsg, 'error');

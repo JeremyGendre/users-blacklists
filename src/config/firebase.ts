@@ -9,7 +9,7 @@ import {
 import {
     getFirestore,
     doc,
-    setDoc, QuerySnapshot, DocumentData,
+    setDoc, QuerySnapshot, DocumentData, DocumentSnapshot, Timestamp
 } from "firebase/firestore";
 
 // TODO: change this
@@ -36,6 +36,8 @@ const registerWithEmailAndPassword = async (email: string, password: string) => 
     await setDoc(doc(db, "User", user.uid), {
         uid: user.uid,
         email,
+        createdAt: Timestamp.now(),
+        updatedAt : Timestamp.now(),
     });
     return user;
 };
@@ -56,6 +58,10 @@ const buildCollectionFromSnapshot = (snapshot: QuerySnapshot<DocumentData>) => {
     return newItems;
 };
 
+const buildObjectFromSnapshot = (snapshot: DocumentSnapshot<DocumentData>) => {
+    return {uid: snapshot.id, ...snapshot.data()};
+};
+
 export {
     auth,
     db,
@@ -63,7 +69,8 @@ export {
     registerWithEmailAndPassword,
     sendPasswordReset,
     signout,
-    buildCollectionFromSnapshot
+    buildCollectionFromSnapshot,
+    buildObjectFromSnapshot
 };
 
 export default firebaseConfig;

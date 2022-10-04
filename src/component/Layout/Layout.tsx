@@ -13,11 +13,9 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import React, {PropsWithChildren, useContext, useState} from "react";
-import ListAltIcon from '@mui/icons-material/ListAlt';
+import React, {PropsWithChildren, useState} from "react";
 import {Link, useNavigate, Outlet, Navigate} from "react-router-dom";
 import {useUser} from "../../context/UserContext";
-import HistoryIcon from '@mui/icons-material/History';
 
 const drawerWidth: number = 240;
 
@@ -116,10 +114,12 @@ export default function Layout({ children, window }: PropsWithChildren<{window?:
             </Box>
             <Box
                 component="main"
-                sx={{ flexGrow: 1, p: 2, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+                sx={{ flexGrow: 1, p: 2, width: { sm: `calc(100% - ${drawerWidth}px)` }, display: 'flex', flexDirection: 'column', minHeight: '100vh'}}
             >
                 <Toolbar />
-                <Outlet/> {/* or {children} */}
+                <div className="flex-1">
+                    <Outlet/> {/* or {children} */}
+                </div>
             </Box>
         </Box>
     );

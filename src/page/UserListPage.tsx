@@ -5,6 +5,7 @@ import {buildObjectFromSnapshot, db} from "../config/firebase";
 import {useUser} from "../context/UserContext";
 import {SourceType} from "../models/Source";
 import {CircularProgress} from "@mui/material";
+import BlacklistedUserCard from "../component/cards/BlacklistedUserCard";
 
 export default function UserListPage(){
     const { id: sourceId } = useParams();
@@ -42,7 +43,7 @@ export default function UserListPage(){
             </h1>
             <hr/>
             {source.users && source.users.map((blUser,index) => (
-                <div key={index}>{blUser.nickname}</div>
+                <BlacklistedUserCard key={index} blacklistedUser={blUser}>{blUser.reason}</BlacklistedUserCard>
             ))}
         </div>
     );

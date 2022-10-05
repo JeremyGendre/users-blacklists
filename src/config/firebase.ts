@@ -12,7 +12,6 @@ import {
     setDoc, deleteDoc, updateDoc, QuerySnapshot, DocumentData, DocumentSnapshot, Timestamp
 } from "firebase/firestore";
 
-// TODO: change this
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
     authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -58,9 +57,10 @@ const buildCollectionFromSnapshot = (snapshot: QuerySnapshot<DocumentData>) => {
     return newItems;
 };
 
-const buildObjectFromSnapshot = (snapshot: DocumentSnapshot<DocumentData>) => {
+
+function buildObjectFromSnapshot(snapshot: DocumentSnapshot<DocumentData>) {
     return {uid: snapshot.id, ...snapshot.data()};
-};
+}
 
 const deleteItem = async (collectionName: string, docId: string) => {
     return await deleteDoc(doc(db, collectionName, docId));

@@ -1,5 +1,5 @@
-import {Button} from "@mui/material";
-import {useEffect, useState} from "react";
+import {Button, CircularProgress} from "@mui/material";
+import {useCallback, useEffect, useState} from "react";
 import SourceFormDialog from "../component/dialogs/SourceFormDialog";
 import AddIcon from '@mui/icons-material/Add';
 import {useUser} from "../context/UserContext";
@@ -13,12 +13,15 @@ export default function HomePage() {
     const [openDialog, setOpenDialog] = useState(false);
     const [sources, setSources] = useState<any[]>([]);
     const [editedSource, setEditedSource] = useState<SourceType|undefined>(undefined);
+    const [fetching, setFetching] = useState(true);
 
-    const fetchSources = async () => {
+    const fetchSources = useCallback(async () => {
         if(!user) return;
+        setFetching(true);
         const querySnapshot = await getDocs(query(collection(db, "Source"), where("user", "==", user.uid), orderBy('createdAt')));
         setSources(buildCollectionFromSnapshot(querySnapshot));
-    };
+        setFetching(false);
+    },[user]);
 
     const handleSourceDeletion = (sourceUid: string) => {
         setSources(prev => prev.filter(source => source.uid !== sourceUid));
@@ -26,7 +29,13 @@ export default function HomePage() {
 
     useEffect(() => {
         if(user) fetchSources();
-    }, [user]);
+    }, [user, fetchSources]);
+
+    if(fetching) return (
+        <div className="d-flex h-full w-full align-items-center justify-center">
+            <CircularProgress size="4rem"/>
+        </div>
+    );
 
     return (
         <div className="d-flex h-full">

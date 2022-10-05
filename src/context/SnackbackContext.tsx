@@ -38,7 +38,7 @@ export default function SnackbarContextProvider({children}: PropsWithChildren<{}
             {alerts.map((alert,index) => (
                 <Snackbar
                     key={index}
-                    style={{marginBottom: `${index*4}em`}}
+                    style={{marginBottom: `${index*4}em`, maxWidth: '90vw'}}
                     open
                     anchorOrigin={{
                         vertical: 'bottom',

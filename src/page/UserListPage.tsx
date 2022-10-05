@@ -1,33 +1,45 @@
 import { useParams } from "react-router-dom";
 import {useCallback, useEffect, useState} from "react";
-import {collection, doc, getDoc, getDocs, orderBy, query, where} from "@firebase/firestore";
-import {buildObjectFromSnapshot, db} from "../config/firebase";
+import {getDocs,query,collection,where,orderBy} from "@firebase/firestore";
+import {buildCollectionFromSnapshot, buildObjectFromSnapshot, db, getItem} from "../config/firebase";
 import {useUser} from "../context/UserContext";
 import {SourceType} from "../models/Source";
-import {CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import BlacklistedUserCard from "../component/cards/BlacklistedUserCard";
+import {CircularProgress} from "@mui/material";
 import UserList from "../component/UserList";
+import {BlacklistedUser} from "../models/BlacklistedUser";
+import {useSnackbar} from "../context/SnackbackContext";
 
 export default function UserListPage(){
-    const { id: sourceId } = useParams();
+    const { id: sourceUid } = useParams();
     const {user} = useUser();
+    const {addAlert} = useSnackbar();
     const [source, setSource] = useState<SourceType>();
+    const [blUsers, setBlUsers] = useState<Array<BlacklistedUser>>([]);
     const [fetching, setFetching] = useState(true);
 
-    const fetchSource = useCallback(async () => {
-        if(!user || !sourceId) return;
+    const fetchSourceAndUsers = useCallback(async () => {
+        if(!user || !sourceUid) return;
         setFetching(true);
-        const snapshot = await getDoc(doc(db, "Source", sourceId));
-        const newSource = buildObjectFromSnapshot(snapshot);
-        // @ts-ignore, on sait que c'est bien une source à ce point
-        setSource(newSource);
-        //const querySnapshot = await getDocs(query(collection(db, "Source"), where("user", "==", user.uid), orderBy('createdAt')));
+        try{
+            const snapshot = await getItem("Source", sourceUid);
+            const newSource = buildObjectFromSnapshot(snapshot);
+            // @ts-ignore, on sait que c'est bien une source à ce point
+            setSource(newSource);
+
+            const querySnapshot = await getDocs(query(collection(db, "BlacklistedUser"), where("sourceUid", "==", sourceUid), orderBy('createdAt')));
+            const blacklistedUsers = buildCollectionFromSnapshot(querySnapshot);
+            setBlUsers(blacklistedUsers);
+        }catch(error){
+            console.error(error);
+            addAlert('An unexpected error occured','error');
+        }
+
         setFetching(false);
-    },[user, sourceId]);
+    },[user, sourceUid]);
 
     useEffect(() => {
-        fetchSource();
-    },[fetchSource]);
+        fetchSourceAndUsers();
+    },[fetchSourceAndUsers]);
 
     if(fetching) return (
         <div className="d-flex h-full w-full align-items-center justify-center">
@@ -35,7 +47,7 @@ export default function UserListPage(){
         </div>
     );
 
-    if(!source) return <div>No resource found :(</div>;
+    if(!source || !sourceUid) return <div>No resource found :(</div>;
 
     return (
         <div>
@@ -44,7 +56,7 @@ export default function UserListPage(){
             </h1>
             <hr/>
             <div className="d-flex mt-2">
-                {<UserList users={source.users ?? []}/>}
+                <UserList users={blUsers} sourceUid={sourceUid} onNew={(newBlUser) => setBlUsers(prev => [...prev, newBlUser])}/>
             </div>
         </div>
     );

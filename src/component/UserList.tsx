@@ -12,14 +12,18 @@ import {
 import {BlacklistedUser} from "../models/BlacklistedUser";
 import {useEffect, useState} from "react";
 import AddIcon from '@mui/icons-material/Add';
+import BlacklistedUserFormDialog from "./dialogs/BlacklistedUserFormDialog";
 
 interface UserListProps {
     users: Array<BlacklistedUser>;
+    sourceUid: string;
+    onNew?: (newBlUser: any) => void;
 }
 
-export default function UserList({users}: UserListProps){
+export default function UserList({users, sourceUid, onNew}: UserListProps){
     const [displayedUsers, setDisplayedUsers] = useState(users);
     const [filterValue, setFilterValue] = useState('');
+    const [openDialog, setOpenDialog] = useState(false);
 
     useEffect(() => {
         if(!filterValue){
@@ -37,9 +41,15 @@ export default function UserList({users}: UserListProps){
                     Total : {users.length} | Displayed : {displayedUsers.length}
                 </div>
                 <div>
-                    <Button variant="contained" onClick={() => {}} startIcon={<AddIcon />}>
+                    <Button variant="contained" onClick={() => setOpenDialog(true)} startIcon={<AddIcon />}>
                         New blacklisted user
                     </Button>
+                    <BlacklistedUserFormDialog
+                        onClose={() => setOpenDialog(false)}
+                        onNew={onNew}
+                        open={openDialog}
+                        sourceUid={sourceUid}
+                    />
                 </div>
                 <TextField
                     variant="outlined"

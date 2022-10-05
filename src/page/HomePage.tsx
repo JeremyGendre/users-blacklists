@@ -7,9 +7,11 @@ import {collection, where, getDocs, query, orderBy} from "firebase/firestore";
 import {buildCollectionFromSnapshot, db} from "../config/firebase";
 import SourceCard from "../component/cards/SourceCard";
 import {SourceType} from "../models/Source";
+import {useSnackbar} from "../context/SnackbackContext";
 
 export default function HomePage() {
     const {user} = useUser();
+    const {addAlert} = useSnackbar();
     const [openDialog, setOpenDialog] = useState(false);
     const [sources, setSources] = useState<any[]>([]);
     const [editedSource, setEditedSource] = useState<SourceType|undefined>(undefined);
@@ -18,8 +20,13 @@ export default function HomePage() {
     const fetchSources = useCallback(async () => {
         if(!user) return;
         setFetching(true);
-        const querySnapshot = await getDocs(query(collection(db, "Source"), where("user", "==", user.uid), orderBy('createdAt')));
-        setSources(buildCollectionFromSnapshot(querySnapshot));
+        try{
+            const querySnapshot = await getDocs(query(collection(db, "Source"), where("userUid", "==", user.uid), orderBy('createdAt')));
+            setSources(buildCollectionFromSnapshot(querySnapshot));
+        }catch(error){
+            console.error(error);
+            addAlert('An unexpected error occured', 'error');
+        }
         setFetching(false);
     },[user]);
 

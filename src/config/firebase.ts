@@ -9,7 +9,7 @@ import {
 import {
     getFirestore,
     doc,
-    setDoc, deleteDoc, updateDoc, QuerySnapshot, DocumentData, DocumentSnapshot, Timestamp
+    setDoc, getDoc, deleteDoc, updateDoc, QuerySnapshot, DocumentData, DocumentSnapshot, Timestamp, addDoc, collection
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -70,6 +70,14 @@ const updateItem = async (collectionName: string, docId: string, data: object) =
     return await updateDoc(doc(db, collectionName, docId), data);
 };
 
+const addItem = async (collectionName: string, data: object) => {
+    return await addDoc(collection(db, collectionName), data);
+};
+
+const getItem = async (collectionName: string, itemId: string) => {
+    return await getDoc(doc(db, collectionName, itemId));
+};
+
 export {
     auth,
     db,
@@ -80,7 +88,9 @@ export {
     buildCollectionFromSnapshot,
     buildObjectFromSnapshot,
     deleteItem,
-    updateItem
+    updateItem,
+    addItem,
+    getItem
 };
 
 export default firebaseConfig;

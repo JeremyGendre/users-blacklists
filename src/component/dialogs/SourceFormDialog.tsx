@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import {FormEvent, useEffect, useState} from "react";
-import {doc, collection, addDoc, getDoc, Timestamp} from "firebase/firestore";
-import {buildObjectFromSnapshot, db, updateItem} from "../../config/firebase";
+import {Timestamp} from "firebase/firestore";
+import {addItem, buildObjectFromSnapshot, getItem, updateItem} from "../../config/firebase";
 import {useUser} from "../../context/UserContext";
 import {useSnackbar} from "../../context/SnackbackContext";
 import {SourceType} from "../../models/Source";
@@ -51,8 +51,8 @@ export default function SourceFormDialog({onNew, onEdit, source, ...other} : New
         if(!user) return;
         setAdding(true);
         try{
-            if(!source) addSource();
-            else editSource();
+            if(!source) {await addSource();}
+            else {await editSource();}
         }catch(error: any){
             const errorMsg = error.message ?? 'An unexpected error occured';
             addAlert(errorMsg, 'error');
@@ -66,8 +66,8 @@ export default function SourceFormDialog({onNew, onEdit, source, ...other} : New
 
     const addSource = async () => {
         if(!user) return;
-        const newSourceRef = await addDoc(collection(db, "Source"), {name, user: user.uid, createdAt: Timestamp.now()});
-        const snapshot = await getDoc(doc(db, "Source", newSourceRef.id));
+        const newSourceRef = await addItem("Source", {name, userUid: user.uid, createdAt: Timestamp.now()});
+        const snapshot = await getItem("Source", newSourceRef.id);
         const newSource = buildObjectFromSnapshot(snapshot);
         if(onNew) onNew(newSource);
         addAlert(`New source '${name}' created`);

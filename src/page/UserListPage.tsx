@@ -4,8 +4,9 @@ import {collection, doc, getDoc, getDocs, orderBy, query, where} from "@firebase
 import {buildObjectFromSnapshot, db} from "../config/firebase";
 import {useUser} from "../context/UserContext";
 import {SourceType} from "../models/Source";
-import {CircularProgress} from "@mui/material";
+import {CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import BlacklistedUserCard from "../component/cards/BlacklistedUserCard";
+import UserList from "../component/UserList";
 
 export default function UserListPage(){
     const { id: sourceId } = useParams();
@@ -42,9 +43,9 @@ export default function UserListPage(){
                 Blacklisted users for : {source && source.name}
             </h1>
             <hr/>
-            {source.users && source.users.map((blUser,index) => (
-                <BlacklistedUserCard key={index} blacklistedUser={blUser}>{blUser.reason}</BlacklistedUserCard>
-            ))}
+            <div className="d-flex mt-2">
+                {<UserList users={source.users ?? []}/>}
+            </div>
         </div>
     );
 }

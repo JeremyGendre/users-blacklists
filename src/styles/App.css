@@ -31,6 +31,12 @@
 .h-screen {height: 100vh;}
 
 .m-auto {margin: auto;}
+.mt-auto {margin-top: auto;}
+.mb-auto {margin-bottom: auto;}
+.mr-auto {margin-right: auto;}
+.ml-auto {margin-left: auto;}
+.my-auto{margin-top: auto; margin-bottom: auto;}
+.mx-auto{margin-left: auto; margin-right: auto;}
 
 .my-1 {
     margin-top: 0.5em;
@@ -40,7 +46,7 @@
     margin-top: 1em;
     margin-bottom: 1em;
 }
-.my-auto{margin-top: auto; margin-bottom: auto;}
+
 .mx-1 {
     margin-left: 0.5em;
     margin-right: 0.5em;

@@ -1,5 +1,5 @@
 import {
-    Button,
+    Button, CircularProgress, IconButton,
     Paper,
     Table,
     TableBody,
@@ -13,32 +13,31 @@ import {BlacklistedUser} from "../models/BlacklistedUser";
 import {useEffect, useState} from "react";
 import AddIcon from '@mui/icons-material/Add';
 import BlacklistedUserFormDialog from "./dialogs/BlacklistedUserFormDialog";
+import DeleteIcon from '@mui/icons-material/Delete';
+import ConfirmDialog from "./dialogs/ConfirmDialog";
+import {deleteItem} from "../config/firebase";
+import {useSnackbar} from "../context/SnackbackContext";
+import {useBlacklistedUsers} from "../context/BlacklistedUsersContext";
 
-interface UserListProps {
-    users: Array<BlacklistedUser>;
-    sourceUid: string;
-    onNew?: (newBlUser: any) => void;
-}
-
-export default function UserList({users, sourceUid, onNew}: UserListProps){
-    const [displayedUsers, setDisplayedUsers] = useState(users);
+export default function UserList(){
+    const {blUsers, source} = useBlacklistedUsers();
+    const [displayedUsers, setDisplayedUsers] = useState(blUsers);
     const [filterValue, setFilterValue] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
 
     useEffect(() => {
         if(!filterValue){
-            setDisplayedUsers(users);
+            setDisplayedUsers(blUsers);
         }else{
-            setDisplayedUsers(users.filter(user => user.nickname.includes(filterValue) || user.reason.includes(filterValue)));
+            setDisplayedUsers(blUsers.filter(user => user.nickname.includes(filterValue) || user.reason.includes(filterValue)));
         }
-    },[filterValue, users]);
-
+    },[filterValue, blUsers]);
 
     return (
         <div className="w-full">
             <div className="d-flex flex-wrap gap-1 justify-between align-items-center mb-2">
                 <div>
-                    Total : {users.length} | Displayed : {displayedUsers.length}
+                    Total : {blUsers.length} | Displayed : {displayedUsers.length}
                 </div>
                 <div>
                     <Button variant="contained" onClick={() => setOpenDialog(true)} startIcon={<AddIcon />}>
@@ -46,9 +45,8 @@ export default function UserList({users, sourceUid, onNew}: UserListProps){
                     </Button>
                     <BlacklistedUserFormDialog
                         onClose={() => setOpenDialog(false)}
-                        onNew={onNew}
                         open={openDialog}
-                        sourceUid={sourceUid}
+                        sourceUid={source ? source.uid : ''}
                     />
                 </div>
                 <TextField
@@ -69,17 +67,7 @@ export default function UserList({users, sourceUid, onNew}: UserListProps){
                     </TableHead>
                     <TableBody>
                         {displayedUsers && displayedUsers.map((blUser,index) => (
-                            <TableRow
-                                hover
-                                key={index}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {blUser.nickname}
-                                </TableCell>
-                                <TableCell>{blUser.reason}</TableCell>
-                                <TableCell>delete</TableCell>
-                            </TableRow>
+                            <BlUserRow blUser={blUser} key={index}/>
                         ))}
                         {displayedUsers.length === 0 && (
                             <TableRow
@@ -94,5 +82,52 @@ export default function UserList({users, sourceUid, onNew}: UserListProps){
                 </Table>
             </TableContainer>
         </div>
+    );
+}
+
+function BlUserRow({blUser}: {blUser: BlacklistedUser}){
+    const {removeUser} = useBlacklistedUsers();
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const {addAlert} = useSnackbar();
+
+    const handleBlUserDeletion = async () => {
+        setDeleting(true);
+        try{
+            await deleteItem("BlacklistedUser", blUser.uid);
+            removeUser(blUser);
+        }catch(error){
+            console.error(error);
+            addAlert('An error occured during user removal', 'error');
+        }
+        setDeleting(false);
+    };
+
+    return (
+        <TableRow
+            hover
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+        >
+            <TableCell component="th" scope="row">
+                {blUser.nickname}
+            </TableCell>
+            <TableCell>{blUser.reason}</TableCell>
+            <TableCell>
+                <IconButton
+                    color="secondary"
+                    aria-label="delete"
+                    disabled={deleting}
+                    onClick={() => setOpenConfirm(true)}
+                >
+                    {deleting ? (<CircularProgress size='1.5rem'/>) : (<DeleteIcon />)}
+                </IconButton>
+                <ConfirmDialog
+                    open={openConfirm}
+                    title="Remove this user from the blacklist ?"
+                    onConfirm={handleBlUserDeletion}
+                    onClose={() => setOpenConfirm(false)}
+                />
+            </TableCell>
+        </TableRow>
     );
 }

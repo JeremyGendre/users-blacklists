@@ -13,9 +13,10 @@ import {FormEvent, useState} from "react";
 import {useSnackbar} from "../../context/SnackbackContext";
 import {Timestamp} from "@firebase/firestore";
 import {addItem, buildObjectFromSnapshot, getItem} from "../../config/firebase";
+import {BlacklistedUser} from "../../models/BlacklistedUser";
+import {useBlacklistedUsers} from "../../context/BlacklistedUsersContext";
 
 interface BlacklistedUserFormDialogProps extends DialogProps{
-    onNew?: (blacklistedUser: any) => void;
     onClose: () => void;
     sourceUid: string;
 }
@@ -25,8 +26,9 @@ type FormError = {
     reason?: string
 };
 
-export default function BlacklistedUserFormDialog({onNew, sourceUid, ...other} : BlacklistedUserFormDialogProps){
+export default function BlacklistedUserFormDialog({sourceUid, ...other} : BlacklistedUserFormDialogProps){
     const {addAlert} = useSnackbar();
+    const {addUser} = useBlacklistedUsers();
     const [nickname, setNickname] = useState<string>('');
     const [reason, setReason] = useState<string>('');
     const [formError, setFormError] = useState<FormError>({});
@@ -72,7 +74,8 @@ export default function BlacklistedUserFormDialog({onNew, sourceUid, ...other} :
         const newRef = await addItem("BlacklistedUser", {nickname, reason, sourceUid, createdAt: Timestamp.now()});
         const snapshot = await getItem("BlacklistedUser", newRef.id);
         const newBlUser = buildObjectFromSnapshot(snapshot);
-        if(onNew) onNew(newBlUser);
+        // @ts-ignore on sait que c'est un BlacklistedUser à ce point
+        addUser(newBlUser);
         addAlert(`User '${nickname}' added to this blacklist`);
     };
 

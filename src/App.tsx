@@ -8,13 +8,14 @@ import LoginPage from "./page/auth/LoginPage";
 import RegisterPage from "./page/auth/RegisterPage";
 import HomePage from "./page/HomePage";
 import UserListPage from "./page/UserListPage";
+import BlacklistedUsersContextProvider from "./context/BlacklistedUsersContext";
 
 function App() {
     return (
         <Routes>
             <Route path="/" element={<Layout/>}>
                 <Route index element={<HomePage/>} />
-                <Route path="list/:id" element={<UserListPage/>} />
+                <Route path="list/:id" element={<BlacklistedUsersContextProvider><UserListPage/></BlacklistedUsersContextProvider>} />
             </Route>
             <Route path="/auth" element={<AuthPage/>}>
                 <Route path="login" element={<LoginPage/>} />

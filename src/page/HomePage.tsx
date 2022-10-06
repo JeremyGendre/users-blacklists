@@ -8,12 +8,14 @@ import {buildCollectionFromSnapshot, db} from "../config/firebase";
 import SourceCard from "../component/cards/SourceCard";
 import {SourceType} from "../models/Source";
 import {useSnackbar} from "../context/SnackbackContext";
+import {displayDate, timestampToDate} from "../utils/date";
+import HistoryRouter from "react-router-dom";
 
 export default function HomePage() {
     const {user} = useUser();
     const {addAlert} = useSnackbar();
     const [openDialog, setOpenDialog] = useState(false);
-    const [sources, setSources] = useState<any[]>([]);
+    const [sources, setSources] = useState<SourceType[]>([]);
     const [editedSource, setEditedSource] = useState<SourceType|undefined>(undefined);
     const [fetching, setFetching] = useState(true);
 
@@ -47,16 +49,18 @@ export default function HomePage() {
     return (
         <div className="d-flex h-full">
             <div className="m-auto d-flex flex-wrap gap-1">
-                {sources.map(source => (
+                {sources.map(source => {
+                    console.log(source);
+                    return(
                     <SourceCard
                         key={source.uid}
                         source={source}
                         onDelete={handleSourceDeletion}
                         onEdit={() => setEditedSource(source)}
                     >
-                        <div className="italic">X users blacklisted</div>
+                        <small className="italic">Creation : {displayDate(timestampToDate(source.createdAt.seconds*1000))}</small>
                     </SourceCard>
-                ))}
+                )})}
                 <div className="my-auto">
                     <Button variant="contained" onClick={() => setOpenDialog(true)} startIcon={<AddIcon />}>
                         New source

@@ -15,7 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import BlacklistedUserFormDialog from "./dialogs/BlacklistedUserFormDialog";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmDialog from "./dialogs/ConfirmDialog";
-import {deleteItem} from "../config/firebase";
+import {deleteItem, updateItem} from "../config/firebase";
 import {useSnackbar} from "../context/SnackbackContext";
 import {useBlacklistedUsers} from "../context/BlacklistedUsersContext";
 
@@ -86,15 +86,17 @@ export default function UserList(){
 }
 
 function BlUserRow({blUser}: {blUser: BlacklistedUser}){
-    const {removeUser} = useBlacklistedUsers();
+    const {removeUser, source, blUsers} = useBlacklistedUsers();
     const [openConfirm, setOpenConfirm] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const {addAlert} = useSnackbar();
 
     const handleBlUserDeletion = async () => {
+        if(!source) return;
         setDeleting(true);
         try{
             await deleteItem("BlacklistedUser", blUser.uid);
+            await updateItem("Source", source.uid, {usersCount: blUsers.length - 1});
             removeUser(blUser);
         }catch(error){
             console.error(error);

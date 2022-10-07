@@ -66,7 +66,7 @@ export default function SourceFormDialog({onNew, onEdit, source, ...other} : New
 
     const addSource = async () => {
         if(!user) return;
-        const newSourceRef = await addItem("Source", {name, userUid: user.uid, createdAt: Timestamp.now()});
+        const newSourceRef = await addItem("Source", {name, userUid: user.uid, createdAt: Timestamp.now(), usersCount: 0});
         const snapshot = await getItem("Source", newSourceRef.id);
         const newSource = buildObjectFromSnapshot(snapshot);
         if(onNew) onNew(newSource);

@@ -8,6 +8,7 @@ import {deleteItem} from "../../config/firebase";
 import {SourceType} from "../../models/Source";
 import { useNavigate } from "react-router-dom";
 import MyCard from "./MyCard";
+import {displayDate, timestampToDate} from "../../utils/date";
 
 interface SourceCardProps{
     source: SourceType;
@@ -33,6 +34,8 @@ export default function SourceCard({source, onDelete, onEdit, children}: PropsWi
                 <Typography gutterBottom variant="h5" component="div">
                     {source.name}
                 </Typography>
+                <div><span className="font-bold">{source.usersCount}</span> users blacklisted</div>
+                <small className="italic" >Creation : {displayDate(timestampToDate(source.createdAt.seconds*1000))}</small>
                 {children}
             </CardContent>
             <CardActions className="justify-end">

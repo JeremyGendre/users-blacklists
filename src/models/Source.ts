@@ -5,4 +5,5 @@ export interface SourceType{
     name: string;
     userUid: string;
     createdAt: Timestamp;
+    usersCount: number;
 }

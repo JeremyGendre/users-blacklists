@@ -1,7 +1,7 @@
 {
   "short_name": "User blacklist",
   "name": "User blacklist",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "default_locale": "fr",
   "description": "Allow to make a bunch of user blacklist, from differents sources (games, apps, etc.)",
   "icons": [

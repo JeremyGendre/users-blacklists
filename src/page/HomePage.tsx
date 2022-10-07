@@ -49,9 +49,7 @@ export default function HomePage() {
     return (
         <div className="d-flex h-full">
             <div className="m-auto d-flex flex-wrap gap-1">
-                {sources.map(source => {
-                    console.log(source);
-                    return(
+                {sources.map(source => (
                     <SourceCard
                         key={source.uid}
                         source={source}
@@ -60,7 +58,7 @@ export default function HomePage() {
                     >
                         <small className="italic">Creation : {displayDate(timestampToDate(source.createdAt.seconds*1000))}</small>
                     </SourceCard>
-                )})}
+                ))}
                 <div className="my-auto">
                     <Button variant="contained" onClick={() => setOpenDialog(true)} startIcon={<AddIcon />}>
                         New source

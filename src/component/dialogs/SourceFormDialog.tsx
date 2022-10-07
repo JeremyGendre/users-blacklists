@@ -81,10 +81,12 @@ export default function SourceFormDialog({onNew, onEdit, source, ...other} : New
 
     return (
         <Dialog {...other}>
-            <DialogTitle>New Source</DialogTitle>
+            <DialogTitle>
+                {source ? 'Edit Source' : 'New Source'}
+            </DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Creating a new source will allow you to make a user blacklist for this source.
+                    {!source ? 'Creating a new source will allow you to make a user blacklist for this source.' : ''}
                 </DialogContentText>
                 <form onSubmit={handleSubmit}>
                     <TextField

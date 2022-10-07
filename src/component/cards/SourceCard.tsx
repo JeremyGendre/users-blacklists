@@ -47,7 +47,7 @@ export default function SourceCard({source, onDelete, onEdit, children}: PropsWi
                 <IconButton color="primary" aria-label="see" disabled={deleting} onClick={() => navigate(`/list/${source.uid}`)}>
                     <VisibilityIcon />
                 </IconButton>
-                <IconButton color="secondary" aria-label="delete" disabled={deleting} onClick={() => setOpenConfirm(true)}>
+                <IconButton color="error" aria-label="delete" disabled={deleting} onClick={() => setOpenConfirm(true)}>
                     {deleting ? (<CircularProgress size='1.5rem'/>) : (<DeleteIcon />)}
                 </IconButton>
             </CardActions>

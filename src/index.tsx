@@ -7,18 +7,22 @@ import reportWebVitals from './reportWebVitals';
 import UserContextProvider from "./context/UserContext";
 import {BrowserRouter} from "react-router-dom";
 import SnackbarContextProvider from "./context/SnackbackContext";
+import {ThemeProvider} from "@mui/material";
+import {theme} from "./utils/theme";
 
 const root = createRoot(document.getElementById('root')!);
 
 root.render(
   <React.StrictMode>
-      <UserContextProvider>
-          <SnackbarContextProvider>
-              <BrowserRouter>
-                  <App />
-              </BrowserRouter>
-          </SnackbarContextProvider>
-      </UserContextProvider>
+      <ThemeProvider theme={theme}>
+          <UserContextProvider>
+              <SnackbarContextProvider>
+                  <BrowserRouter>
+                      <App />
+                  </BrowserRouter>
+              </SnackbarContextProvider>
+          </UserContextProvider>
+      </ThemeProvider>
   </React.StrictMode>
 );
 

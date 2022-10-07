@@ -114,9 +114,9 @@ function BlUserRow({blUser}: {blUser: BlacklistedUser}){
                 {blUser.nickname}
             </TableCell>
             <TableCell>{blUser.reason}</TableCell>
-            <TableCell>
+            <TableCell align="right">
                 <IconButton
-                    color="secondary"
+                    color="error"
                     aria-label="delete"
                     disabled={deleting}
                     onClick={() => setOpenConfirm(true)}

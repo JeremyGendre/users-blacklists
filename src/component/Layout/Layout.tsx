@@ -16,6 +16,8 @@ import Typography from '@mui/material/Typography';
 import React, {PropsWithChildren, useState} from "react";
 import {Link, useNavigate, Outlet, Navigate} from "react-router-dom";
 import {useUser} from "../../context/UserContext";
+import {Search} from "@mui/icons-material";
+import SearchIcon from '@mui/icons-material/Search';
 
 const drawerWidth: number = 240;
 

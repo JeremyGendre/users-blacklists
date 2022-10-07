@@ -26,7 +26,7 @@ export default function BlacklistedUserCard({blacklistedUser, children}: PropsWi
                 {children}
             </CardContent>
             <CardActions className="justify-end">
-                <IconButton color="secondary" aria-label="delete" disabled={deleting} onClick={() => setOpenConfirm(true)}>
+                <IconButton color="error" aria-label="delete" disabled={deleting} onClick={() => setOpenConfirm(true)}>
                     {deleting ? (<CircularProgress size='1.5rem'/>) : (<DeleteIcon />)}
                 </IconButton>
             </CardActions>

@@ -57,7 +57,7 @@ export default function UserList(){
                 />
             </div>
             <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 300 }} aria-label="simple table">
+                <Table size="small" sx={{ minWidth: 300 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell><span className="font-bold">Nickname</span></TableCell>

@@ -1,7 +1,7 @@
 import {Autocomplete, CircularProgress, InputAdornment, TextField} from "@mui/material";
 import { styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {FormEvent, useCallback, useEffect, useState} from "react";
 import {useDebounceValue} from "@jeremygendre/react-custom-hooks";
 import { query, collection, getDocs, where } from "firebase/firestore";
 import {buildCollectionFromSnapshot, db} from "../../config/firebase";
@@ -16,17 +16,17 @@ export default function GlobalNicknameSearch(){
     const debouncedValue = useDebounceValue(search);
     const navigate = useNavigate();
 
-    const searchFnc = async () => {
+    const searchFnc = useCallback(async () => {
         setLoading(true);
         const q = query(collection(db, "BlacklistedUser"), where("nickname", "==", debouncedValue));
         const querySnapshot = await getDocs(q);
         setOptions(buildCollectionFromSnapshot(querySnapshot));
         setLoading(false);
-    };
+    }, [debouncedValue]);
 
     useEffect(() => {
         searchFnc();
-    },[debouncedValue]);
+    },[searchFnc]);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();

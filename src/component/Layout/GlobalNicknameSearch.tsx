@@ -42,7 +42,7 @@ export default function GlobalNicknameSearch(){
                 open={open}
                 onOpen={() => {setOpen(true);}}
                 onClose={() => {setOpen(false);}}
-                getOptionLabel={(option) => option.nickname + ` (${option.sourceUid})`}
+                getOptionLabel={(option) => option.nickname + ` (${option.reason})`}
                 options={options}
                 onChange={(event: any, newValue:BlacklistedUser|null) => {
                     if(newValue){
@@ -69,7 +69,7 @@ export default function GlobalNicknameSearch(){
                             ),
                             endAdornment: (
                                 <React.Fragment>
-                                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                    {loading ? <CircularProgress sx={{color: 'white'}} size={20} /> : null}
                                     {params.InputProps.endAdornment}
                                 </React.Fragment>
                             ),

@@ -17,7 +17,6 @@ export default function GlobalNicknameSearch(){
     const navigate = useNavigate();
 
     const searchFnc = async () => {
-        console.log(debouncedValue);
         setLoading(true);
         const q = query(collection(db, "BlacklistedUser"), where("nickname", "==", debouncedValue));
         const querySnapshot = await getDocs(q);
@@ -26,7 +25,6 @@ export default function GlobalNicknameSearch(){
     };
 
     useEffect(() => {
-        console.log(debouncedValue);
         searchFnc();
     },[debouncedValue]);
 
@@ -72,6 +70,7 @@ export default function GlobalNicknameSearch(){
                             endAdornment: (
                                 <React.Fragment>
                                     {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                    {params.InputProps.endAdornment}
                                 </React.Fragment>
                             ),
                         }}

@@ -35,7 +35,6 @@ export default function GlobalNicknameSearch(){
 
     return (
         <form onSubmit={handleSubmit}>
-            {/**/}
             <Autocomplete
                 id="autocomplete-search"
                 sx={{ width: 300 }}
@@ -49,6 +48,7 @@ export default function GlobalNicknameSearch(){
                         navigate(`/list/${newValue.sourceUid}`)
                     }
                 }}
+                noOptionsText="No results"
                 loading={loading}
                 size="small"
                 renderInput={(params) => (

@@ -16,8 +16,9 @@ import Typography from '@mui/material/Typography';
 import React, {PropsWithChildren, useState} from "react";
 import {Link, useNavigate, Outlet, Navigate} from "react-router-dom";
 import {useUser} from "../../context/UserContext";
-import {Search} from "@mui/icons-material";
+import {InputAdornment, TextField} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import { styled } from '@mui/material/styles';
 
 const drawerWidth: number = 240;
 
@@ -70,19 +71,34 @@ export default function Layout({ children, window }: PropsWithChildren<{window?:
                     ml: { sm: `${drawerWidth}px` },
                 }}
             >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { sm: 'none' } }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        <Link to="/" className="no-decoration-link">User blacklists</Link>
-                    </Typography>
+                <Toolbar className="d-flex justify-between flex-wrap">
+                    <div className="d-flex align-items-center">
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            edge="start"
+                            onClick={handleDrawerToggle}
+                            sx={{ mr: 2, display: { sm: 'none' } }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div">
+                            <Link to="/" className="no-decoration-link">User blacklists</Link>
+                        </Typography>
+                    </div>
+                    <CssTextField
+                        id="global-search"
+                        placeholder="Search..."
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment sx={{color: 'white'}} position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                        variant="outlined"
+                        size="small"
+                    />
                 </Toolbar>
             </AppBar>
             <Box
@@ -126,3 +142,27 @@ export default function Layout({ children, window }: PropsWithChildren<{window?:
         </Box>
     );
 }
+
+const CssTextField = styled(TextField)({
+    '& .MuiInputBase-root':{
+        color:'white',
+    },
+    '& label.Mui-focused': {
+        color: 'green',
+    },
+    '& .MuiInput-underline:after': {
+        borderBottomColor: 'green',
+    },
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: 'white',
+            color: 'white'
+        },
+        '&:hover fieldset': {
+            borderColor: 'lightgray',
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: 'lightgray',
+        },
+    },
+});

@@ -43,7 +43,7 @@ export default function BlacklistedUsersContextProvider({children}: PropsWithChi
         }
 
         setFetching(false);
-    },[sourceUid]);
+    },[sourceUid, addAlert]);
 
     useEffect(() => {
         fetchSourceAndUsers();

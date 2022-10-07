@@ -13,7 +13,6 @@ import {FormEvent, useState} from "react";
 import {useSnackbar} from "../../context/SnackbackContext";
 import {Timestamp} from "@firebase/firestore";
 import {addItem, buildObjectFromSnapshot, getItem, updateItem} from "../../config/firebase";
-import {BlacklistedUser} from "../../models/BlacklistedUser";
 import {useBlacklistedUsers} from "../../context/BlacklistedUsersContext";
 
 interface BlacklistedUserFormDialogProps extends DialogProps{

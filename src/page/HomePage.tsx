@@ -8,8 +8,6 @@ import {buildCollectionFromSnapshot, db} from "../config/firebase";
 import SourceCard from "../component/cards/SourceCard";
 import {SourceType} from "../models/Source";
 import {useSnackbar} from "../context/SnackbackContext";
-import {displayDate, timestampToDate} from "../utils/date";
-import HistoryRouter from "react-router-dom";
 
 export default function HomePage() {
     const {user} = useUser();
@@ -30,7 +28,7 @@ export default function HomePage() {
             addAlert('An unexpected error occured', 'error');
         }
         setFetching(false);
-    },[user]);
+    },[user, addAlert]);
 
     const handleSourceDeletion = (sourceUid: string) => {
         setSources(prev => prev.filter(source => source.uid !== sourceUid));

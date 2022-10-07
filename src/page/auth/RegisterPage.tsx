@@ -38,7 +38,7 @@ export default function RegisterPage() {
                         className="text-center"
                         color="primary"
                     >
-                        Inscription
+                        Register
                     </Typography>
                     <div className="mt-2">
                         <TextField
@@ -58,7 +58,7 @@ export default function RegisterPage() {
                         <TextField
                             required
                             type="password"
-                            label="Mot de passe"
+                            label="Password"
                             variant="outlined"
                             className="w-full"
                             value={password}
@@ -71,7 +71,7 @@ export default function RegisterPage() {
                         <TextField
                             required
                             type="password"
-                            label="Confirmez"
+                            label="Confirm"
                             variant="outlined"
                             className="w-full"
                             value={confirmPassword}
@@ -82,7 +82,7 @@ export default function RegisterPage() {
                     </div>
                     {error && <div className="mt-2 error">{error}</div>}
                     <div className="mt-2">
-                        Déjà inscrit ? <Link to="/auth/login">Se connecter</Link>
+                        Already registered ? <Link to="/auth/login">Log in</Link>
                     </div>
                 </CardContent>
                 <CardActions className="d-flex justify-center">
@@ -92,7 +92,7 @@ export default function RegisterPage() {
                         type="submit"
                         variant="contained"
                     >
-                        S'inscrire
+                        Sign up
                     </LoadingButton>
                 </CardActions>
             </Card>

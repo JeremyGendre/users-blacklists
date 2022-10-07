@@ -37,7 +37,7 @@ export default function LoginPage() {
                         className="text-center"
                         color="primary"
                     >
-                        Connexion
+                        Connection
                     </Typography>
                     <div className="mt-2">
                         <TextField
@@ -57,7 +57,7 @@ export default function LoginPage() {
                         <TextField
                             required
                             type="password"
-                            label="Mot de passe"
+                            label="Password"
                             variant="outlined"
                             className="w-full"
                             value={password}
@@ -68,7 +68,7 @@ export default function LoginPage() {
                     </div>
                     {error && <div className="mt-2 error">{error}</div>}
                     <div className="mt-2">
-                        Nouveau ? <Link to="/auth/register">Inscription</Link>
+                        New ? <Link to="/auth/register">Sign up</Link>
                     </div>
                 </CardContent>
                 <CardActions className="d-flex justify-center">
@@ -78,7 +78,7 @@ export default function LoginPage() {
                         type="submit"
                         variant="contained"
                     >
-                        Se connecter
+                        Log in
                     </LoadingButton>
                 </CardActions>
             </Card>
